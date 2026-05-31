@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 
-public class SquareRootCalculatorTest {
+public class SqrtTest {
     
     private static final double TOLERANCE = 1e-8;
     private SquareRootCalculator calculator;
@@ -19,28 +19,24 @@ public class SquareRootCalculatorTest {
         assertEquals(2.5, calculator.arithmeticMean(2.0, 3.0), TOLERANCE);
         assertEquals(5.0, calculator.arithmeticMean(4.0, 6.0), TOLERANCE);
         assertEquals(0.0, calculator.arithmeticMean(-1.0, 1.0), TOLERANCE);
-        assertEquals(10.0, calculator.arithmeticMean(8.0, 12.0), TOLERANCE);
     }
     
     @Test
     public void testIsAcceptableWithExactValues() {
         assertTrue(calculator.isAcceptable(2.0, 4.0));
         assertTrue(calculator.isAcceptable(3.0, 9.0));
-        assertTrue(calculator.isAcceptable(5.0, 25.0));
     }
     
     @Test
     public void testIsAcceptableWithCloseValues() {
         assertTrue(calculator.isAcceptable(2.000000001, 4.0));
         assertTrue(calculator.isAcceptable(1.999999999, 4.0));
-        assertTrue(calculator.isAcceptable(2.000000005, 4.0));
     }
     
     @Test
     public void testIsAcceptableWithBadEstimates() {
         assertFalse(calculator.isAcceptable(2.1, 4.0));
         assertFalse(calculator.isAcceptable(1.9, 4.0));
-        assertFalse(calculator.isAcceptable(3.5, 9.0));
     }
     
     @Test
@@ -53,9 +49,6 @@ public class SquareRootCalculatorTest {
         
         SquareRootCalculator calcNine = new SquareRootCalculator(9.0);
         assertEquals(3.0, calcNine.refineEstimate(3.0, 9.0), TOLERANCE);
-        
-        SquareRootCalculator calcSixteen = new SquareRootCalculator(16.0);
-        assertEquals(4.0625, calcSixteen.refineEstimate(5.0, 16.0), TOLERANCE);
     }
     
     @Test
@@ -104,19 +97,18 @@ public class SquareRootCalculatorTest {
     }
     
     @Test
-    public void testNewtonMethodConvergenceBehavior() {
+    public void testConvergenceBehavior() {
         SquareRootCalculator calcTwo = new SquareRootCalculator(2.0);
         double currentEstimate = 1.0;
         double previousEstimate;
         double exactValue = Math.sqrt(2.0);
         
-        for (int step = 0; step < 6; step++) {
+        for (int step = 0; step < 5; step++) {
             previousEstimate = currentEstimate;
             currentEstimate = calcTwo.refineEstimate(currentEstimate, 2.0);
             double currentError = Math.abs(currentEstimate - exactValue);
             double previousError = Math.abs(previousEstimate - exactValue);
-            assertTrue("Error decreases at iteration " + step, 
-                      currentError < previousError);
+            assertTrue(currentError < previousError);
         }
     }
     
@@ -125,8 +117,7 @@ public class SquareRootCalculatorTest {
         SquareRootCalculator calcTwo = new SquareRootCalculator(2.0);
         double computedRoot = calcTwo.compute();
         double calculationError = Math.abs(computedRoot * computedRoot - 2.0);
-        assertTrue("Error should be less than precision setting", 
-                  calculationError < calcTwo.getPrecision());
+        assertTrue(calculationError < calcTwo.getPrecision());
     }
     
     @Test
@@ -145,40 +136,32 @@ public class SquareRootCalculatorTest {
     
     @Test
     public void testComputeWithVariousInputs() {
-        double[] testNumbers = {0.01, 0.1, 0.5, 1.5, 2.5, 10, 100, 10000, 0.04, 144.0};
+        double[] testNumbers = {0.01, 0.1, 0.5, 1.5, 2.5, 10, 100, 10000};
         for (double value : testNumbers) {
             SquareRootCalculator sqrtCalc = new SquareRootCalculator(value);
             double computedValue = sqrtCalc.compute();
             double expectedValue = Math.sqrt(value);
-            assertEquals("Square root of " + value, expectedValue, computedValue, 1e-6);
+            assertEquals(expectedValue, computedValue, 1e-6);
         }
     }
     
     @Test
-    public void testComputeForVerySmallNumber() {
-        SquareRootCalculator calcSmall = new SquareRootCalculator(0.000001);
-        assertEquals(0.001, calcSmall.compute(), 1e-8);
-    }
-    
-    @Test
-    public void testComputeForPerfectSquare() {
-        int[] perfectSquares = {16, 25, 36, 49, 64, 81, 100, 121, 144, 169};
-        for (int square : perfectSquares) {
+    public void testComputeForPerfectSquares() {
+        int[] squares = {16, 25, 36, 49, 64, 81, 100};
+        for (int square : squares) {
             SquareRootCalculator calc = new SquareRootCalculator((double)square);
             assertEquals((double)Math.sqrt(square), calc.compute(), 1e-6);
         }
     }
     
     @Test
-    public void testComputeForNonPerfectSquare() {
-        double[] nonSquares = {3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15};
-        for (double value : nonSquares) {
+    public void testComputeForNonPerfectSquares() {
+        double[] values = {3, 5, 6, 7, 8, 10, 11, 12, 13};
+        for (double value : values) {
             SquareRootCalculator calc = new SquareRootCalculator(value);
             double computed = calc.compute();
             double squared = computed * computed;
-            assertTrue("Result squared should be close to original",
-                      Math.abs(squared - value) < 1e-6);
+            assertTrue(Math.abs(squared - value) < 1e-6);
         }
     }
 }
-

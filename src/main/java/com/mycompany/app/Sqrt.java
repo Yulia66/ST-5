@@ -1,6 +1,6 @@
 package com.mycompany.app;
 
-public class SquareRootCalculator
+class SquareRootCalculator
 {
     private double precision = 0.00000001;
     private double targetValue;
