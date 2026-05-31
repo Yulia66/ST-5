@@ -4,11 +4,11 @@
          http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mycompany.app</groupId>
-    <artifactId>my-app</artifactId>
+    <artifactId>sqrt-calculator</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>my-app</name>
-    <url>http://maven.apache.org</url>
+    <version>1.0.0</version>
+    <name>SquareRootCalculator</name>
+    <url>https://github.com/mycompany/sqrt-calculator</url>
     
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
@@ -23,4 +23,19 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

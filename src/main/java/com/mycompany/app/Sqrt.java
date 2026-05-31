@@ -1,34 +1,42 @@
 package com.mycompany.app;
 
-public class Sqrt
+public class SquareRootCalculator
 {
-    double delta = 0.00000001;
-    double arg;
+    private double precision = 0.00000001;
+    private double targetValue;
 
-    public Sqrt(double arg) {
-        this.arg = arg;
+    public SquareRootCalculator(double targetValue) {
+        this.targetValue = targetValue;
     }
 
-    public double average(double x, double y) {
-        return (x + y) / 2.0;
+    public double arithmeticMean(double first, double second) {
+        return (first + second) / 2.0;
     }
 
-    public boolean good(double guess, double x) {
-        return Math.abs(guess * guess - x) < delta;
+    public boolean isAcceptable(double estimate, double value) {
+        return Math.abs(estimate * estimate - value) < precision;
     }
 
-    public double improve(double guess, double x) {
-        return average(guess, x / guess);
+    public double refineEstimate(double estimate, double value) {
+        return arithmeticMean(estimate, value / estimate);
     }
 
-    public double iter(double guess, double x) {
-        if (good(guess, x))
-            return guess;
+    public double iterate(double estimate, double value) {
+        if (isAcceptable(estimate, value))
+            return estimate;
         else
-            return iter(improve(guess, x), x);
+            return iterate(refineEstimate(estimate, value), value);
     }
 
-    public double calc() {
-        return iter(1.0, arg);
+    public double compute() {
+        return iterate(1.0, targetValue);
+    }
+    
+    public void setPrecision(double newPrecision) {
+        this.precision = newPrecision;
+    }
+    
+    public double getPrecision() {
+        return precision;
     }
 }

@@ -1,12 +1,12 @@
 package com.mycompany.app;
 
-public class App
+public class MainApp
 {
     public static void main(String[] args)
     {
-        double val = Double.parseDouble("2.0");
-        Sqrt sqrt = new Sqrt(val);
-        double result = sqrt.calc();
-        System.out.println("Sqrt of " + val + " = " + result);
+        double number = Double.parseDouble("2.0");
+        SquareRootCalculator calculator = new SquareRootCalculator(number);
+        double rootValue = calculator.compute();
+        System.out.println("Square root of " + number + " = " + rootValue);
     }
 }
